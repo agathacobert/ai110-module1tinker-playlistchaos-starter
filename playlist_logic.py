@@ -65,7 +65,7 @@ def classify_song(song: Song, profile: Dict[str, object]) -> str:
 
     hype_min_energy = profile.get("hype_min_energy", 7)
     chill_max_energy = profile.get("chill_max_energy", 3)
-    favorite_genre = profile.get("favorite_genre", "")
+   
 
     hype_keywords = ["rock", "punk", "party"]
     chill_keywords = ["lofi", "ambient", "sleep"]
@@ -73,7 +73,7 @@ def classify_song(song: Song, profile: Dict[str, object]) -> str:
     is_hype_keyword = any(k in genre for k in hype_keywords)
     is_chill_keyword = any(k in title for k in chill_keywords)
 
-    if genre == favorite_genre or energy >= hype_min_energy or is_hype_keyword:
+    if energy >= hype_min_energy or is_hype_keyword:
         return "Hype"
     if energy <= chill_max_energy or is_chill_keyword:
         return "Chill"
@@ -206,3 +206,13 @@ def history_summary(history: List[Song]) -> Dict[str, int]:
         else:
             counts[mood] += 1
     return counts
+
+
+if __name__ == "__main__":
+    # Test a song that should be 'Mixed'
+    # Energy is 5 (between 3 and 7), no keywords
+    test_song = {"title": "Test Song", "artist": "Test Artist", "genre": "Pop", "energy": 5}
+    profile = {"hype_min_energy": 7, "chill_max_energy": 3}
+    
+    mood = classify_song(test_song, profile)
+    print(f"The mood for this song is: {mood}")
